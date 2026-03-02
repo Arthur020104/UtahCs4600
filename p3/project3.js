@@ -70,25 +70,14 @@ var curvesVS = `
 	uniform vec2 p2;
 	uniform vec2 p3;
 	
-    vec2 interpol(vec2 p0, vec2 p1, float i)
-    {
-        return p0 * t + p1 * (1.0 - i);
-    }
-    vec2 bezierEval(vec2 pt0, vec2 pt1, vec2 pt2, vec2 pt3, float step)
-    {
-        vec2 e0 = interpol(pt0, pt1, step);
-        vec2 e1 = interpol(pt1, pt2, step);
-        vec2 e2 = interpol(pt2, pt3, step);
-        
-        vec2 e10 = interpol(e0, e1, step);
-        vec2 e11 = interpol(e1, e2, step);
-        
-        return interpol(e10, e11, step);
-    }
-    void main()
+  vec2 bezierEval()
+  {
+    return pow(1.0 - t, 3.0) * p0 + 3.0 * pow(1.0 - t, 2.0) * t * p1 + 3.0 * (1.0 - t) * pow(t, 2.0) * p2 + pow(t, 3.0) * p3;
+  }
+  void main()
 	{
 		// [TODO] Replace the following with the proper vertex shader code
-		gl_Position = mvp * vec4(bezierEval(p0, p1, p2, p3, t), 0, 1);
+		gl_Position = mvp * vec4(bezierEval(), 0, 1);
 
 	}
     
